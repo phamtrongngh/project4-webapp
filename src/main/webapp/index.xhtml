@@ -2,23 +2,29 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:c="http://java.sun.com/jsf/core">
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
     <h:head>
         <title>Facelet Title</title>
+        <link rel="stylesheet" href="./css/style.css"/>
     </h:head>
     <h:body>
-        <h:form>
-            <h:dataTable border="1" var="item" value="#{userMB.users}">
-                <h:column>
-                    <c:facet name="header">CODE</c:facet>
-                        #{item.name}
-                </h:column>
-                <h:column>
-                    <c:facet name="header">NAME</c:facet>
-                        #{item.age}
-                </h:column>
-            </h:dataTable>
-        </h:form>
+        <div id="logout">
+            <span id="phone">Name</span> <button id="logoutButton">Logout</button>
+        </div>
+        <div id="listChat">
+            <p>Nghia</p>
+            <p>Huy</p>
+            <p>Thanh</p>
+        </div>
+        <div id="boxChat">
+            
+        </div>
+        <input type="text" id="message" />
+        <button id="sendButton">SEND</button>
+        <script src="http://localhost:9032/socket.io/socket.io.js"></script>
+        <script src="./js/script.js"></script>
     </h:body>
+
 </html>
 

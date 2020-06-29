@@ -1,49 +1,63 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package MB;
 
-import com.sun.jersey.api.client.WebResource.Builder;
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.WebResource;
-import com.sun.jersey.api.client.config.ClientConfig;
-import com.sun.jersey.api.client.config.DefaultClientConfig;
 import entities.User;
-import java.io.IOException;
 import java.util.List;
-import javafx.scene.media.Media;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.faces.bean.SessionScoped;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
-import org.codehaus.jackson.type.TypeReference;
-import org.codehaus.jackson.map.ObjectMapper;
+import javax.ws.rs.core.Response;
 
 /**
  *
  * @author BEN ALPHA
  */
 @ManagedBean
-@RequestScoped
+@SessionScoped
 public class UserMB {
 
-    public List<User> getUsers() throws IOException {
-        ClientConfig clientConfig = new DefaultClientConfig();
-        Client client = Client.create(clientConfig);
-        WebResource webResource = client.resource("http://localhost:9032/user");
-        Builder builder = webResource.accept(MediaType.APPLICATION_JSON)
-                .header("content-type", MediaType.APPLICATION_JSON);
-        ClientResponse response = builder.get(ClientResponse.class);
-        if (response.getStatus() != 200) {
-            System.out.println("Failed with HTTP Error code: " + response.getStatus());
-            String error = response.getEntity(String.class);
-            System.out.println("Error" + error);
+    private User user;
+    private WebTarget webTarget;
+    private Client client;
+    private static final String BASE_URI = "http://localhost:9032/user/";
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+    
+    public UserMB() {
+        user = new User();
+        client = ClientBuilder.newClient();
+    }
+
+    public List<User> getUsers() {
+        webTarget = client.target(BASE_URI);
+        return webTarget.request(MediaType.APPLICATION_JSON).get(new GenericType<List<User>>() {
+        });
+    }
+    public void register() {
+        webTarget = client.target(BASE_URI+"register"); // Xác định đường dẫn của register trên api
+        //Dùng đường dẫn để post dữ liệu lên để đăng ký người dùng
+        webTarget.request(MediaType.APPLICATION_JSON).post(Entity.entity(user, MediaType.APPLICATION_JSON));
+    }
+    public String login(){
+        webTarget = client.target(BASE_URI+"login"); // Xác định đường dẫn của login trên api
+        //Dùng đường dẫn để post thông tin đăng nhập lên api
+        //Lưu thông tin trả về vào biến userResponse
+        User userResponse = webTarget.request(MediaType.APPLICATION_JSON)
+                 .post(Entity.entity(user, MediaType.APPLICATION_JSON),new GenericType<User>(){});
+        if (userResponse.getPhone()==null){
+            return "login";
         }
-        ObjectMapper mapper = new ObjectMapper();
-        List<User> list =mapper.readValue(response.getEntity(String.class), new TypeReference<List<User>>(){});
-       
-        return list;
+        return "index";
     }
 }

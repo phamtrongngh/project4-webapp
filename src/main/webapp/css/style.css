@@ -1,0 +1,11 @@
+#listChat{
+    border:1px solid black;
+    width: 10%;
+}
+p{
+    text-align: center;
+}
+#boxChat{
+    height: 200px;
+    border:1px solid black;
+}
