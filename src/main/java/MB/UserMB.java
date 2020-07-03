@@ -64,7 +64,6 @@ public class UserMB {
         
         return "index";
     }
-
     public String logout() {
         webTarget = client.target(BASE_URI + "logout");
         webTarget.request(MediaType.APPLICATION_JSON).post(Entity.entity(user, MediaType.APPLICATION_JSON));
