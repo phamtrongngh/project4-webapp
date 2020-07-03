@@ -13,6 +13,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
@@ -51,8 +52,25 @@ public class ProductMB {
     }
     
     public String postProuct(){
-        
+        webTarget = client.target(BASE_URI);
+        webTarget.request(MediaType.APPLICATION_JSON).post(Entity.entity(this.product, MediaType.APPLICATION_JSON));
+        return "productList";
     }
-        
     
+    public Product getProduct(String id){
+        webTarget = client.target(BASE_URI + id);
+        product = webTarget.request(MediaType.APPLICATION_JSON).get(new GenericType<Product>(){});      
+        return product;
+    }
+    
+    public String putProduct(){
+        webTarget = client.target(BASE_URI);
+        webTarget.request(MediaType.APPLICATION_JSON).put(Entity.entity(this.product, MediaType.APPLICATION_JSON));
+        return "productList";
+    }
+    
+    public void deleteProduct(String id){
+        webTarget = client.target(BASE_URI + id);
+        webTarget.request(MediaType.APPLICATION_JSON).delete(new GenericType<Product>(){});
+    }
 }

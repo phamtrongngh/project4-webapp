@@ -6,8 +6,10 @@
     <h:head>
         <title>Product List</title>
     </h:head>
-    <h:body>    
-        <h:dataTable border="1" var="item" value="#{productMB.getProducts()}">
+    <h:body>
+        <a href="faces/createProduct.xhtml">Create Product</a>
+        <h:form>
+            <h:dataTable border="1" var="item" value="#{productMB.getProducts()}">
                 <h:column>
                     <c:facet name="header">Name</c:facet>
                         #{item.name}
@@ -16,9 +18,20 @@
                     <c:facet name="header">Price</c:facet>
                         #{item.price}
                 </h:column>
-                
+                <h:column>
+                    <c:facet name="header">Update</c:facet>
+                    <h:commandButton value="Update" action="updateProduct" actionListener="#{productMB.getProduct(item.get_id())}">
+                    </h:commandButton>
+                </h:column>
+                <h:column>
+                    <c:facet name="header">Delete</c:facet>
+                    <h:commandButton value="Remove" action="#{productMB.deleteProduct(item.get_id())}">
+                        <c:setPropertyActionListener target="#{productMB.product}" value="#{item}"/>
+                    </h:commandButton>
+                </h:column>
             </h:dataTable>
-        
+        </h:form>
+
     </h:body>
 </html>
 
