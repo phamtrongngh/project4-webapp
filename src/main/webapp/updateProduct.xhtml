@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html">
+    <h:head>
+        <title>Update Product</title>
+    </h:head>
+    <h:body>
+        <h:form>
+            <h:outputText value="Product Id"/><br></br>
+            <h:inputHidden id="_id" value="#{productMB.product._id}" /> <br></br>
+            <h:outputText value="Product Name"/><br></br>
+            <h:inputText id="name" value="#{productMB.product.name}"/> <br></br>
+            <h:outputText value="Price"/><br></br>
+            <h:inputText id="price" value="#{productMB.product.price}"/> <br></br>
+            <h:commandButton value="Update" action="#{productMB.putProduct()}"/>
+        </h:form>
+    </h:body>
+</html>
+
