@@ -18,6 +18,7 @@
                     <c:facet name="header">Price</c:facet>
                         #{item.price}
                 </h:column>
+
                 <h:column>
                     <c:facet name="header">Update</c:facet>
                     <h:commandButton value="Update" action="updateProduct" actionListener="#{productMB.getProduct(item.get_id())}">
@@ -29,6 +30,7 @@
                         <c:setPropertyActionListener target="#{productMB.product}" value="#{item}"/>
                     </h:commandButton>
                 </h:column>
+
             </h:dataTable>
         </h:form>
 

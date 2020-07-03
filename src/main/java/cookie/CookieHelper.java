@@ -32,16 +32,14 @@ public class CookieHelper {
                 }
             }
         }
-
         if (cookie != null) {
             cookie.setValue(value);
         } else {
             cookie = new Cookie(name, value);
             cookie.setPath(request.getContextPath());
+            cookie.setHttpOnly(true);
         }
-
         cookie.setMaxAge(expiry);
-
         HttpServletResponse response = (HttpServletResponse) facesContext.getExternalContext().getResponse();
         response.addCookie(cookie);
     }
