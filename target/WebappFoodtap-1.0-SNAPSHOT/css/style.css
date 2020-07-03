@@ -9,3 +9,11 @@ p{
     height: 200px;
     border:1px solid black;
 }
+#typingPopup{
+    display:none;
+    padding: 5px;
+    color: rgba(0,0,0,0.5);
+}
+#logoutGroup{
+    display:none;
+}

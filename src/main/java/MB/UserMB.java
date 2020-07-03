@@ -25,6 +25,7 @@ public class UserMB {
     private WebTarget webTarget;
     private Client client;
     private static final String BASE_URI = "http://localhost:9032/user/";
+    private String jwt;
 
     public User getUser() {
         return user;
@@ -33,7 +34,7 @@ public class UserMB {
     public void setUser(User user) {
         this.user = user;
     }
-    
+
     public UserMB() {
         user = new User();
         client = ClientBuilder.newClient();
@@ -44,20 +45,29 @@ public class UserMB {
         return webTarget.request(MediaType.APPLICATION_JSON).get(new GenericType<List<User>>() {
         });
     }
+
     public void register() {
-        webTarget = client.target(BASE_URI+"register"); // Xác định đường dẫn của register trên api
+        webTarget = client.target(BASE_URI + "register"); // Xác định đường dẫn của register trên api
         //Dùng đường dẫn để post dữ liệu lên để đăng ký người dùng
         webTarget.request(MediaType.APPLICATION_JSON).post(Entity.entity(user, MediaType.APPLICATION_JSON));
     }
-    public String login(){
-        webTarget = client.target(BASE_URI+"login"); // Xác định đường dẫn của login trên api
+
+    public String login() {
+        webTarget = client.target(BASE_URI + "login"); // Xác định đường dẫn của login trên api
         //Dùng đường dẫn để post thông tin đăng nhập lên api
         //Lưu thông tin trả về vào biến userResponse
-        User userResponse = webTarget.request(MediaType.APPLICATION_JSON)
-                 .post(Entity.entity(user, MediaType.APPLICATION_JSON),new GenericType<User>(){});
-        if (userResponse.getPhone()==null){
+        jwt = "JWT " + webTarget.request(MediaType.APPLICATION_JSON)
+                .post(Entity.entity(user, MediaType.APPLICATION_JSON), String.class);
+        if (jwt.equals("")) {
             return "login";
         }
+        
         return "index";
+    }
+
+    public String logout() {
+        webTarget = client.target(BASE_URI + "logout");
+        webTarget.request(MediaType.APPLICATION_JSON).post(Entity.entity(user, MediaType.APPLICATION_JSON));
+        return "login";
     }
 }

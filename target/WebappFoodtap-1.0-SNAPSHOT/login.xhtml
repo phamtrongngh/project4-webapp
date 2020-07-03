@@ -9,8 +9,8 @@
     <h:body>
         <h:form>
             Phone: <h:inputText value="#{userMB.user.phone}" /> <br/>
-            Password: <h:inputText value="#{userMB.user.password}" /> <br/>
-            <h:commandButton value="Register" action="#{userMB.login()}" />
+            Password: <h:inputSecret value="#{userMB.user.password}" /> <br/>
+            <h:commandButton value="LOGIN" action="#{userMB.login()}" />
         </h:form>
         <script src="http://localhost:9032/socket.io/socket.io.js"></script>
         <script src="./js/script.js"></script>
