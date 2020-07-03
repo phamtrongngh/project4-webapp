@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package MB;
 
 import entities.Product;
@@ -16,7 +15,8 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
-
+import cookie.CookieHelper;
+import javax.ws.rs.core.Cookie;
 /**
  *
  * @author Admin
@@ -24,16 +24,17 @@ import javax.ws.rs.core.MediaType;
 @ManagedBean
 @RequestScoped
 public class ProductMB {
+
     private Product product;
     private WebTarget webTarget;
     private Client client;
     private static final String BASE_URI = "http://localhost:9032/product/";
-    
+
     public ProductMB() {
         product = new Product();
         client = ClientBuilder.newClient();
     }
-    
+
     public Product getProduct() {
         return product;
     }
@@ -41,18 +42,13 @@ public class ProductMB {
     public void setProduct(Product product) {
         this.product = product;
     }
-    
-    public List<Product> getProducts(){
+
+    public List<Product> getProducts() {
         webTarget = client.target(BASE_URI);
         List<Product> list;
-        list = webTarget.request(MediaType.APPLICATION_JSON).get(new GenericType<List<Product>>(){
+        Cookie cookie = new Cookie(BASE_URI, BASE_URI);
+        list = webTarget.request(MediaType.APPLICATION_JSON).get(new GenericType<List<Product>>() {
         });
         return list;
     }
-    
-    public String postProuct(){
-        
-    }
-        
-    
 }
