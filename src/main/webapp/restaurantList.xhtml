@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:c="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>Restaurant List</title>
+    </h:head>
+    <h:body>
+        <a href="faces/createRestaurant.xhtml">Create Product</a>
+        <h:form>
+            <h:dataTable border="1" var="item" value="#{restaurantMB.getRestaurants()}">
+                <h:column>
+                    <c:facet name="header">Name</c:facet>
+                        #{item.name}
+                </h:column>
+                <h:column>
+                    <c:facet name="header">Address</c:facet>
+                        #{item.address}
+                </h:column>
+                <h:column>
+                    <c:facet name="header">Update</c:facet>
+                    <h:commandButton value="Update" action="updateRestaurant" actionListener="#{restaurantMB.getRestaurant(item.get_id())}">
+                    </h:commandButton>
+                </h:column>
+                <h:column>
+                    <c:facet name="header">Delete</c:facet>
+                    <h:commandButton value="Remove" action="#{restaurantMB.deleteRestaurant(item.get_id())}">
+                        <c:setPropertyActionListener target="#{restaurantMB.restaurant}" value="#{item}"/>
+                    </h:commandButton>
+                </h:column>
+            </h:dataTable>
+        </h:form>
+    </h:body>
+</html>
+
