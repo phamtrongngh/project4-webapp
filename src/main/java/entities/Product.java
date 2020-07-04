@@ -21,7 +21,6 @@ public class Product {
     private Double saleOff;
     private String idRes; 
     private List<String> rating;
-    private boolean timestamps;
     private Date createdAt;
     private Date updatedAt;
     private int __v;
@@ -82,13 +81,6 @@ public class Product {
         this.rating = rating;
     }
 
-    public boolean isTimestamps() {
-        return timestamps;
-    }
-
-    public void setTimestamps(boolean timestamps) {
-        this.timestamps = timestamps;
-    }
 
     public Date getCreatedAt() {
         return createdAt;
