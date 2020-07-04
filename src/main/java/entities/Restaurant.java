@@ -23,7 +23,6 @@ public class Restaurant {
     private boolean verified;
     private String avatar;
     private List<User> followers; 
-    private boolean timestamps;
     private Date createdAt;
     private Date updatedAt;
     private int __v;
@@ -98,14 +97,6 @@ public class Restaurant {
 
     public void setFollowers(List<User> followers) {
         this.followers = followers;
-    }
-
-    public boolean isTimestamps() {
-        return timestamps;
-    }
-
-    public void setTimestamps(boolean timestamps) {
-        this.timestamps = timestamps;
     }
 
     public Date getCreatedAt() {
