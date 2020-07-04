@@ -31,7 +31,7 @@ public class UserMB {
     private Client client; //Cái này dùng để khởi tạo client để có thể gọi api
     private static final String BASE_URI = "http://localhost:9032/user/"; //Đường dẫn tới api
     private ObjectMapper mapper; //Cái này dùng để chuyển đổi JSON về kiểu thích hợp
-
+    
     public User getUser() {
         return user;
     }
@@ -66,12 +66,11 @@ public class UserMB {
                 .post(Entity.entity(user, MediaType.APPLICATION_JSON), String.class);
         Map<String, String> responseMap = mapper.readValue(responseJSON, new TypeReference<Map<String, String>>() {
         });
-
         if (responseMap.get("access_token") == null) {
             return "login";
         }
         if (CookieHelper.getCookie("accessToken") == null) {
-            CookieHelper.setCookie("token", "JWT " + responseMap.get("access_token"), 3600);
+            CookieHelper.setCookie("accessToken", "JWT " + responseMap.get("access_token"), 3600);
         }
 
         return "productList";

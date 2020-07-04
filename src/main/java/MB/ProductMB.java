@@ -17,6 +17,7 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import cookie.CookieHelper;
+import javax.ws.rs.client.Invocation.Builder;
 import javax.ws.rs.core.Cookie;
 /**
  *
@@ -29,11 +30,21 @@ public class ProductMB {
     private Product product;
     private WebTarget webTarget;
     private Client client;
+    private Builder builder;
+    private String cookie;
     private static final String BASE_URI = "http://localhost:9032/product/";
 
     public ProductMB() {
         product = new Product();
         client = ClientBuilder.newClient();
+        if (CookieHelper.getCookie("accessToken")==null){
+            cookie="";
+        }else{
+            cookie = CookieHelper.getCookie("accessToken").getValue();
+        }
+        builder = client.target(BASE_URI)
+                        .request(MediaType.APPLICATION_JSON)
+                        .header("authorization", cookie);
     }
 
     public Product getProduct() {
@@ -45,18 +56,15 @@ public class ProductMB {
     }
 
     public List<Product> getProducts() {
-        webTarget = client.target(BASE_URI);
         List<Product> list;
-        Cookie cookie = new Cookie(BASE_URI, BASE_URI);
-        list = webTarget.request(MediaType.APPLICATION_JSON).get(new GenericType<List<Product>>() {
+        list = builder.get(new GenericType<List<Product>>() {
         });
         return list;
     }
 
     
     public String postProuct(){
-        webTarget = client.target(BASE_URI);
-        webTarget.request(MediaType.APPLICATION_JSON).post(Entity.entity(this.product, MediaType.APPLICATION_JSON));
+        builder.post(Entity.entity(this.product, MediaType.APPLICATION_JSON));
         return "productList";
     }
     
@@ -74,7 +82,7 @@ public class ProductMB {
     
     public void deleteProduct(String id){
         webTarget = client.target(BASE_URI + id);
-        webTarget.request(MediaType.APPLICATION_JSON).delete(new GenericType<Product>(){});
+        builder.delete(new GenericType<Product>(){});
     }
 
 }
