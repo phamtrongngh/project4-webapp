@@ -69,11 +69,12 @@ public class UserMB {
         if (responseMap.get("access_token") == null) {
             return "login";
         }
-        if (CookieHelper.getCookie("accessToken") == null) {
-            CookieHelper.setCookie("accessToken", "JWT " + responseMap.get("access_token"), 3600);
-        }
+        CookieHelper.setCookie("accessToken","JWT "+responseMap.get("access_token") , 3600);
+//        if (CookieHelper.getCookie("accessToken") == null) {
+//            CookieHelper.setCookie("accessToken", "JWT " + responseMap.get("access_token"), 3600);
+//        }
 
-        return "productList";
+        return "login";
     }
     public String logout() {
         webTarget = client.target(BASE_URI + "logout");
