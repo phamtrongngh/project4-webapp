@@ -9,25 +9,11 @@
         <link rel="stylesheet" href="./css/style.css"/>
     </h:head>
     <h:body>
-        <div  id="logout">
-            <span id="name">#{userMB.user.fullname}</span> 
-            <h:form>
-                <h:commandButton id="logoutButton" value="Logout" action="#{userMB.logout}" />
-            </h:form>
-        </div>
-        <div id="listChat">
-        </div>
-        <div id="boxChat">
-            <div id="typingPopup">
-                Someone is typing a comment...
-            </div>
-        </div>
+        
         <h:form>
-            <h:inputText id="message"  value="#{messageMB.content}"/>
-            <h:commandButton id="sendButton" value="Send"  action="#{messageMB.sendMessage()}">
-                <f:ajax  execute="sendButton"/>
-            </h:commandButton>
+            <h:commandButton value="add cookie" action="#{testMB.login()}" />
         </h:form>
+        
         <script src="http://localhost:9032/socket.io/socket.io.js"></script>
         <script src="./js/script.js"></script>
     </h:body>

@@ -17,7 +17,10 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import cookie.CookieHelper;
+import java.text.MessageFormat;
+import javax.ws.rs.client.Invocation.Builder;
 import javax.ws.rs.core.Cookie;
+
 /**
  *
  * @author Admin
@@ -34,6 +37,7 @@ public class ProductMB {
     public ProductMB() {
         product = new Product();
         client = ClientBuilder.newClient();
+        webTarget = client.target(BASE_URI);
     }
 
     public Product getProduct() {
@@ -45,36 +49,38 @@ public class ProductMB {
     }
 
     public List<Product> getProducts() {
-        webTarget = client.target(BASE_URI);
-        List<Product> list;
-        Cookie cookie = new Cookie(BASE_URI, BASE_URI);
-        list = webTarget.request(MediaType.APPLICATION_JSON).get(new GenericType<List<Product>>() {
-        });
-        return list;
+        return webTarget.request(MediaType.APPLICATION_JSON)
+                        .header("authorization", CookieHelper.getCookie("accessToken"))
+                        .get(new GenericType<List<Product>>(){});
     }
 
-    
-    public String postProuct(){
-        webTarget = client.target(BASE_URI);
-        webTarget.request(MediaType.APPLICATION_JSON).post(Entity.entity(this.product, MediaType.APPLICATION_JSON));
+    public String postProuct() {
+        webTarget.request(MediaType.APPLICATION_JSON)
+                 .header("authorization", CookieHelper.getCookie("accessToken"))
+                 .post(Entity.entity(product, MediaType.APPLICATION_JSON));
         return "productList";
     }
-    
-    public Product getProduct(String id){
-        webTarget = client.target(BASE_URI + id);
-        product = webTarget.request(MediaType.APPLICATION_JSON).get(new GenericType<Product>(){});      
+
+    public Product getProduct(String id) {
+        product = webTarget.path(id)
+                           .request(MediaType.APPLICATION_JSON)
+                           .header("authorization", CookieHelper.getCookie("accessToken"))
+                           .get(new GenericType<Product>(){});
         return product;
     }
-    
-    public String putProduct(){
-        webTarget = client.target(BASE_URI);
-        webTarget.request(MediaType.APPLICATION_JSON).put(Entity.entity(this.product, MediaType.APPLICATION_JSON));
+
+    public String putProduct() {
+        webTarget.request(MediaType.APPLICATION_JSON)
+                 .header("authorization", CookieHelper.getCookie("accessToken"))
+                 .put(Entity.entity(this.product, MediaType.APPLICATION_JSON));
         return "productList";
     }
-    
-    public void deleteProduct(String id){
-        webTarget = client.target(BASE_URI + id);
-        webTarget.request(MediaType.APPLICATION_JSON).delete(new GenericType<Product>(){});
+
+    public void deleteProduct(String id) {
+        webTarget.path(id)
+                 .request(MediaType.APPLICATION_JSON)
+                 .header("authorization", CookieHelper.getCookie("accessToken"))
+                 .delete();
     }
 
 }
