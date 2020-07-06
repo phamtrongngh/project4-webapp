@@ -9,7 +9,7 @@
     <h:body>
         <a href="faces/createProduct.xhtml">Create Product</a>
         <h:form>
-            <h:dataTable border="1" var="item" value="#{productMB.getProducts()}">
+            <h:dataTable border="1" var="item" value="#{productMB.products}">
                 <h:column>
                     <c:facet name="header">Name</c:facet>
                         #{item.name}

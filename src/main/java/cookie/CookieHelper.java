@@ -36,20 +36,22 @@ public class CookieHelper {
             cookie.setValue(value);
         } else {
             cookie = new Cookie(name, value);
-            cookie.setMaxAge(expiry);
             cookie.setPath(request.getContextPath());
+            cookie.setMaxAge(expiry);
         }
         HttpServletResponse response = (HttpServletResponse) facesContext.getExternalContext().getResponse();
         response.addCookie(cookie);
+
+    }
+
+    public static void deleteCookie(String name) {
+        setCookie(name, "", 0);
     }
 
     public static String getCookie(String name) {
-
         FacesContext facesContext = FacesContext.getCurrentInstance();
-
         HttpServletRequest request = (HttpServletRequest) facesContext.getExternalContext().getRequest();
         Cookie cookie = null;
-
         Cookie[] userCookies = request.getCookies();
         if (userCookies != null && userCookies.length > 0) {
             for (int i = 0; i < userCookies.length; i++) {

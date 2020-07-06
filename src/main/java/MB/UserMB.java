@@ -31,7 +31,7 @@ public class UserMB {
     private Client client; //Cái này dùng để khởi tạo client để có thể gọi api
     private static final String BASE_URI = "http://localhost:9032/user/"; //Đường dẫn tới api
     private ObjectMapper mapper; //Cái này dùng để chuyển đổi JSON về kiểu thích hợp
-    
+
     public User getUser() {
         return user;
     }
@@ -60,25 +60,31 @@ public class UserMB {
     }
 
     public String login() throws IOException {
-        webTarget = client.target(BASE_URI + "login"); // Xác định đường dẫn của login trên api
-        //Dùng đường dẫn để post thông tin đăng nhập lên api
+        // Xác định đường dẫn của login trên api
+        webTarget = client.target(BASE_URI + "login");
+        // Gọi api login trả về chuỗi JSON
         String responseJSON = webTarget.request(MediaType.APPLICATION_JSON)
                 .post(Entity.entity(user, MediaType.APPLICATION_JSON), String.class);
+        // Chuyển đổi JSON thành Map
         Map<String, String> responseMap = mapper.readValue(responseJSON, new TypeReference<Map<String, String>>() {
         });
-        if (responseMap.get("access_token") == null) {
+        // Lấy ra chuỗi JWT vừa nhận được từ Map
+        String jwt = "JWT " + responseMap.get("access_token");
+        // Nếu chuỗi jwt bằng null thì trả về lại trang login
+        if (jwt == null) {
             return "login";
         }
-        CookieHelper.setCookie("accessToken","JWT "+responseMap.get("access_token") , 3600);
-//        if (CookieHelper.getCookie("accessToken") == null) {
-//            CookieHelper.setCookie("accessToken", "JWT " + responseMap.get("access_token"), 3600);
-//        }
-
-        return "login";
+        // Cookie chưa lưu jwt thì lưu vào
+        if (CookieHelper.getCookie("accessToken").equals("")) {
+            CookieHelper.setCookie("accessToken", jwt, 9999999);
+        }
+        return "index";
     }
+
     public String logout() {
         webTarget = client.target(BASE_URI + "logout");
         webTarget.request(MediaType.APPLICATION_JSON).post(Entity.entity(user, MediaType.APPLICATION_JSON));
+        CookieHelper.deleteCookie("accessToken");
         return "login";
     }
 }
