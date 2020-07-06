@@ -6,6 +6,7 @@
 
 package MB;
 
+import cookie.CookieHelper;
 import entities.Restaurant;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
@@ -41,37 +42,42 @@ public class RestaurantMB {
     public RestaurantMB() {
         restaurant = new Restaurant();
         client = ClientBuilder.newClient();
+        webTarget = client.target(BASE_URI);
     }
     
         public List<Restaurant> getRestaurants(){
-        webTarget = client.target(BASE_URI);
-        List<Restaurant> list;
-        list = webTarget.request(MediaType.APPLICATION_JSON).get(new GenericType<List<Restaurant>>(){
-        });
-        return list;
+        return webTarget.request(MediaType.APPLICATION_JSON)
+                .header("authorization", CookieHelper.getCookie("accessToken"))
+                .get(new GenericType<List<Restaurant>>(){});
     }
     
     public String postRestaurant(){
-        webTarget = client.target(BASE_URI);
-        webTarget.request(MediaType.APPLICATION_JSON).post(Entity.entity(this.restaurant, MediaType.APPLICATION_JSON));
+        webTarget.request(MediaType.APPLICATION_JSON)
+                .header("authorization", CookieHelper.getCookie("accessToken"))
+                .post(Entity.entity(this.restaurant, MediaType.APPLICATION_JSON_TYPE));        
         return "restaurantList";
     }
     
     public Restaurant getRestaurant(String id){
-        webTarget = client.target(BASE_URI + id);
-        restaurant = webTarget.request(MediaType.APPLICATION_JSON).get(new GenericType<Restaurant>(){});      
+        restaurant = webTarget.path(id)
+                              .request(MediaType.APPLICATION_JSON)
+                              .header("authorization", CookieHelper.getCookie("accessToken"))
+                              .get(new GenericType<Restaurant>(){});
         return restaurant;
     }
     
     public String putRestaurant(){
-        webTarget = client.target(BASE_URI);
-        webTarget.request(MediaType.APPLICATION_JSON).put(Entity.entity(this.restaurant, MediaType.APPLICATION_JSON));
+        webTarget.request(MediaType.APPLICATION_JSON)
+                 .header("authorization", CookieHelper.getCookie("accessToken"))
+                 .put(Entity.entity(this.restaurant, MediaType.APPLICATION_JSON));
         return "restaurantList";
     }
     
     public void deleteRestaurant(String id){
-        webTarget = client.target(BASE_URI + id);
-        webTarget.request(MediaType.APPLICATION_JSON).delete(new GenericType<Restaurant>(){});
+        webTarget.path(id)
+                 .request(MediaType.APPLICATION_JSON)
+                 .header("authorization", CookieHelper.getCookie("accessToken"))
+                 .delete();
     } 
     
 }

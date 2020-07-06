@@ -5,6 +5,7 @@
  */
 package MB;
 
+import cookie.CookieHelper;
 import entities.Newfeed;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
@@ -35,6 +36,7 @@ public class NewfeedMB {
     public NewfeedMB() {
         newfeed = new Newfeed();
         client = ClientBuilder.newClient();
+        webTarget = client.target(BASE_URI);
     }
 
     public Newfeed getNewfeed() {
@@ -46,36 +48,39 @@ public class NewfeedMB {
     }
 
     public List<Newfeed> getNewfeeds() {
-        webTarget = client.target(BASE_URI);
-        List<Newfeed> list;
-        list = webTarget.request(MediaType.APPLICATION_JSON).get(new GenericType<List<Newfeed>>() {
-        });
-        return list;
+        return webTarget.request(MediaType.APPLICATION_JSON)
+                        .header("authorization", CookieHelper.getCookie("accessToken"))
+                        .get(new GenericType<List<Newfeed>>(){});
     }
 
     public String postNewfeed() {
-        webTarget = client.target(BASE_URI);
-        webTarget.request(MediaType.APPLICATION_JSON).post(Entity.entity(this.newfeed, MediaType.APPLICATION_JSON));
+        webTarget.request(MediaType.APPLICATION_JSON)
+                .header("authorization", CookieHelper.getCookie("accessToken"))
+                .post(Entity.entity(this.newfeed, MediaType.APPLICATION_JSON));
         return "";
     }
 
     public Newfeed getNewfeed(String id) {
-        webTarget = client.target(BASE_URI + id);
-        newfeed = webTarget.request(MediaType.APPLICATION_JSON).get(new GenericType<Newfeed>() {
+        newfeed = webTarget.path(id)
+                           .request(MediaType.APPLICATION_JSON)
+                           .header("authorization", CookieHelper.getCookie("accessToken"))
+                           .get(new GenericType<Newfeed>() {
         });
         return newfeed;
     }
 
     public String putnewfeed() {
-        webTarget = client.target(BASE_URI);
-        webTarget.request(MediaType.APPLICATION_JSON).put(Entity.entity(this.newfeed, MediaType.APPLICATION_JSON));
+        webTarget.request(MediaType.APPLICATION_JSON)
+                 .header("authorization", CookieHelper.getCookie("accessToken"))
+                 .put(Entity.entity(this.newfeed, MediaType.APPLICATION_JSON));
         return "";
     }
 
     public void deletenewfeed(String id) {
-        webTarget = client.target(BASE_URI + id);
-        webTarget.request(MediaType.APPLICATION_JSON).delete(new GenericType<Newfeed>() {
-        });
+        webTarget.path(id)
+                 .request(MediaType.APPLICATION_JSON)
+                 .header("authorization", CookieHelper.getCookie("accessToken"))
+                 .delete();
     }
 
 }
